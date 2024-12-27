@@ -2,15 +2,17 @@
 import 'dart:io';
 
 void main(){
-  print("enter the number ")
-  int a = int.parse(stdin.readLineSync()!);
-  //321
-  int rem ;
-  int reverce = 0;
-  while(a!=0){
-    rem = a%10;
-    reverce = reverce*10 + rem;
-    a = a~/10;
+
+  int? n;
+  stdout.write("Enter size = ");
+  n = int.parse(stdin.readLineSync()!);
+
+  List<int> arr = [];
+  print("Enter a nums");
+  for(int i = 0 ; i<n ; i++){
+    arr.add(int.parse(stdin.readLineSync()!));
   }
-  print("reverce");
+  for(int i = arr.length ; i>0 ; i--){
+    print(arr);
+  }
 }

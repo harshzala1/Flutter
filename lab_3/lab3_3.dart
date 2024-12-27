@@ -2,9 +2,12 @@
 import 'dart:io';
 
 void main(){
-    print("enter the number");
-    int a = int.parse(stdin.readLineSync()!);
-    int count = 1;
+    int? a;
+    stdout.write("Enter num = ");
+    a = int.parse(stdin.readLineSync()!);
+
+    int count =1;
+
     if(a==0 || a==1){
       print("Number is not prime ");
     }
@@ -14,7 +17,7 @@ void main(){
           count++;
         }
       }
-      if(count>1){
+      if(count>2){
         print("not prime num");
       }
       else{

@@ -2,13 +2,17 @@
 
 import 'dart:io';
 void main(){
-   print("enter first nnumber ");
-   int a = int.parse(stdin.readLineSync()!);
-   print("enter second nnumber ");
-   int b = int.parse(stdin.readLineSync()!);
-   for(int i = a ; i <= b ;i++){
-      if((i%2==0)&&(i%3!=0)){
-         print(" ${i} is divisible by 2 but not divisible by 3. ");
+   int? a;
+   stdout.write("Enter first num = ");
+   a = int.parse(stdin.readLineSync()!);
+
+   int? b;
+   stdout.write("Enter second num = ");
+   b = int.parse(stdin.readLineSync()!);
+
+   for(int i = a!; i <= b ; i++){
+      if(i%2==0 && i%3!=0){
+         print("$i");
       }
    }
 }
