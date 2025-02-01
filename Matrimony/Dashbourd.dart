@@ -36,6 +36,11 @@ List<User> userList = [
     isLiked: true,
   ),
 ];
+
+
+void main() {
+  runApp(MyApp());
+}
 class AddUserScreen extends StatefulWidget {
   final User? userToEdit;
 
@@ -194,6 +199,8 @@ class _AddUserScreenState extends State<AddUserScreen> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Enter an email address.";
+                    } else if (!value.endsWith('@gmail.com')) {
+                      return "Please enter a valid Gmail address.";
                     }
                     return null;
                   },
@@ -207,6 +214,8 @@ class _AddUserScreenState extends State<AddUserScreen> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Enter a mobile number.";
+                    } else if (value.length != 10 || !RegExp(r'^[0-9]+$').hasMatch(value)) {
+                      return "Mobile number must be exactly 10 digits.";
                     }
                     return null;
                   },
@@ -502,19 +511,312 @@ class AboutUsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('About Us'),
-        backgroundColor: Colors.red,
+        centerTitle: true,
+        title: Text(
+          'About Us',
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 34, color: Colors.white),
+        ),
+        backgroundColor: Colors.purple,
       ),
-      body: Center(
-        child: Text('About Us Screen Content Here'),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: Image.asset(
+                      'marrrige.jpg',
+                      height: 100,
+                    ),
+                  ),
+
+                  SizedBox(height: 8),
+                  Text(
+                    'Matrimony App',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Meet Our Team',
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  backgroundColor: Colors.purple.shade200),
+            ),
+            Card(
+              elevation: 10,
+              shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  color: Colors.purple,
+                  width: 2,
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Developed by  : ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            'Harsh Zala (23010101307)',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Mentored by   : ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            'Prof. Mehul Bhundiya  (Computer Engineering Department)',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Explored by    : ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            'ASWDC, School Of Computer Science',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Eulogized by  : ',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            'Darshan University, Rajkot, Gujarat - INDIA',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            SizedBox(height: 20),
+            Text(
+              'About ASWDC',
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  backgroundColor: Colors.purple.shade200),
+            ),
+            Card(
+              elevation: 10,
+              shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  color: Colors.purple,
+                  width: 2,
+                ),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Image.asset(
+                      'assets/darshan_logo.jpg',
+                      height: 130,
+                      width: 700,
+                    ),
+                    Text(
+                      'ASWDC is Application, Software and Website Development Center @ Darshan University run by Students and Staff of School Of Computer Science.',
+                      style: TextStyle(fontSize: 14),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Sole purpose of ASWDC is to bridge the gap between university curriculum & industry demands. Students learn cutting-edge technologies, develop real-world applications & experience professional environments @ ASWDC under the guidance of industry experts & faculty members.',
+                      style: TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Contact Us',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                backgroundColor: Colors.purple.shade200,
+              ),
+            ),
+            Card(
+              elevation: 10,
+              shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  color: Colors.purple,
+                  width: 2,
+                ),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.email, color: Colors.purple),
+                        SizedBox(width: 8),
+                        Text('aswdc@darshan.ac.in'),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Icon(Icons.phone, color: Colors.purple),
+                        SizedBox(width: 8),
+                        Text('+91-9727747317'),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Icon(Icons.web, color: Colors.purple),
+                        SizedBox(width: 8),
+                        Text('www.darshan.ac.in'),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            Card(
+              elevation: 10,
+              shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  color: Colors.purple,
+                  width: 2,
+                ),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.share, color: Colors.purple),
+                        SizedBox(width: 8),
+                        Text('Share App'),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Icon(Icons.app_registration_outlined,
+                            color: Colors.purple),
+                        SizedBox(width: 8),
+                        Text('More Apps'),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Icon(Icons.star, color: Colors.purple),
+                        SizedBox(width: 8),
+                        Text('Rate Us'),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Icon(Icons.thumb_up, color: Colors.purple),
+                        SizedBox(width: 8),
+                        Text('Like us on Facebook'),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Icon(Icons.update, color: Colors.purple),
+                        SizedBox(width: 8),
+                        Text('Check For Update'),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 5),
+            Divider(
+              color: Colors.grey,
+            ),
+            Center(
+              child: Text(
+                '© 2025 Darshan University\nAll Rights Reserved - Privacy Policy\nMade with ❤ in India',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey.shade900,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-void main() {
-  runApp(MyApp());
-}
 
 class MyApp extends StatelessWidget {
   @override
