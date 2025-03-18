@@ -37,7 +37,7 @@ class _RestApiState extends State<RestApi> {
 
   Future<void> getData() async {
     try {
-      final response = await http.get(Uri.parse('https://66a9c002613eced4eba6165b.mockapi.io/product'));
+      final response = await http.get(Uri.parse('https://67d8e1a000348dd3e2a88421.mockapi.io/MYapi'));
       if (response.statusCode == 200) {
         List<dynamic> jsonData = jsonDecode(response.body);
         setState(() {
@@ -51,7 +51,7 @@ class _RestApiState extends State<RestApi> {
 
   Future<void> deleteData(String id) async {
     try {
-      final response = await http.delete(Uri.parse('https://66a9c002613eced4eba6165b.mockapi.io/product/$id'));
+      final response = await http.delete(Uri.parse('https://67d8e1a000348dd3e2a88421.mockapi.io/MYapi/$id'));
       if (response.statusCode == 200) {
         getData();
       }
@@ -108,8 +108,8 @@ class _RestApiState extends State<RestApi> {
                 };
                 try {
                   final url = existingData == null
-                      ? 'https://66a9c002613eced4eba6165b.mockapi.io/product'
-                      : 'https://66a9c002613eced4eba6165b.mockapi.io/product/${existingData['id']}';
+                      ? 'https://67d8e1a000348dd3e2a88421.mockapi.io/MYapi'
+                      : 'https://67d8e1a000348dd3e2a88421.mockapi.io/MYapi/${existingData['id']}';
                   final response = await (existingData == null
                       ? http.post(Uri.parse(url), headers: {'Content-Type': 'application/json'}, body: jsonEncode(userData))
                       : http.put(Uri.parse(url), headers: {'Content-Type': 'application/json'}, body: jsonEncode(userData)));
