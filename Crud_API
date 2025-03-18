@@ -1,0 +1,196 @@
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.deepPurple),
+      home: RestApi(),
+    );
+  }
+}
+
+class RestApi extends StatefulWidget {
+  const RestApi({super.key});
+
+  @override
+  State<RestApi> createState() => _RestApiState();
+}
+
+class _RestApiState extends State<RestApi> {
+  List<Map<String, dynamic>> datalist = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  Future<void> getData() async {
+    try {
+      final response = await http.get(Uri.parse('https://66a9c002613eced4eba6165b.mockapi.io/product'));
+      if (response.statusCode == 200) {
+        List<dynamic> jsonData = jsonDecode(response.body);
+        setState(() {
+          datalist = jsonData.cast<Map<String, dynamic>>();
+        });
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
+  }
+
+  Future<void> deleteData(String id) async {
+    try {
+      final response = await http.delete(Uri.parse('https://66a9c002613eced4eba6165b.mockapi.io/product/$id'));
+      if (response.statusCode == 200) {
+        getData();
+      }
+    } catch (e) {
+      print('Error deleting data: $e');
+    }
+  }
+
+  void showUserDialog({Map<String, dynamic>? existingData}) {
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController ageController = TextEditingController();
+    final _formKey = GlobalKey<FormState>();
+
+    if (existingData != null) {
+      nameController.text = existingData['name'];
+      ageController.text = existingData['age'].toString();
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(existingData == null ? 'Add User' : 'Edit User'),
+        content: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                controller: nameController,
+                decoration: InputDecoration(labelText: 'Name'),
+                validator: (value) => value!.isEmpty ? 'Enter a name' : null,
+              ),
+              SizedBox(height: 10),
+              TextFormField(
+                controller: ageController,
+                decoration: InputDecoration(labelText: 'Age'),
+                keyboardType: TextInputType.number,
+                validator: (value) => value!.isEmpty ? 'Enter an age' : null,
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                Map<String, dynamic> userData = {
+                  'name': nameController.text,
+                  'age': int.tryParse(ageController.text) ?? 0,
+                };
+                try {
+                  final url = existingData == null
+                      ? 'https://66a9c002613eced4eba6165b.mockapi.io/product'
+                      : 'https://66a9c002613eced4eba6165b.mockapi.io/product/${existingData['id']}';
+                  final response = await (existingData == null
+                      ? http.post(Uri.parse(url), headers: {'Content-Type': 'application/json'}, body: jsonEncode(userData))
+                      : http.put(Uri.parse(url), headers: {'Content-Type': 'application/json'}, body: jsonEncode(userData)));
+
+                  if (response.statusCode == 200 || response.statusCode == 201) {
+                    getData();
+                    Navigator.pop(context);
+                  }
+                } catch (e) {
+                  print('Error submitting data: $e');
+                }
+              }
+            },
+            child: Text(existingData == null ? 'Add' : 'Update'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.deepPurple,
+        onPressed: () => showUserDialog(),
+        child: Icon(Icons.add, color: Colors.white),
+      ),
+      appBar: AppBar(
+        title: Text('User List', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.deepPurple,
+        centerTitle: true,
+      ),
+      body: SafeArea(
+        child: datalist.isEmpty
+            ? Center(child: CircularProgressIndicator())
+            : ListView.builder(
+          padding: EdgeInsets.all(10),
+          itemCount: datalist.length,
+          itemBuilder: (context, index) {
+            var item = datalist[index];
+            return Card(
+              elevation: 6,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: ListTile(
+                contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                leading: CircleAvatar(
+                  backgroundColor: Colors.deepPurple,
+                  child: Text(
+                    item['name'][0],
+                    style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                title: Text(
+                  item['name'],
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                subtitle: Text(
+                  'Age: ${item['age']}',
+                  style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                ),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      onPressed: () => showUserDialog(existingData: item),
+                      icon: Icon(Icons.edit, color: Colors.orange, size: 28),
+                    ),
+                    IconButton(
+                      onPressed: () => deleteData(item['id'].toString()),
+                      icon: Icon(Icons.delete, color: Colors.red, size: 28),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
